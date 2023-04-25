@@ -31,9 +31,21 @@ public class Quiz1 {
     }
 
     // 1.2 각 취미를 선호하는 정씨 성을 갖는 인원이 몇 명인지 계산하여라.
+    
+    /*
+    1-1과 똑같이 접근하기
+    1. 정씨 성을 가진 사람만 남기기
+    2. 남은 사람 중에서, 1-1과 같은 작업 하기
+     */
     public Map<String, Integer> quiz2() throws IOException {
         List<String[]> csvLines = readCsvLines();
-        return new HashMap<>();
+        final String lastName = "정";
+
+        return csvLines.stream()
+            .filter(name -> name[0].trim().startsWith(lastName))
+            .map(array -> array[1].trim())
+            .flatMap(hobbies -> Arrays.stream(hobbies.split(":")))
+            .collect(Collectors.toMap(hobby -> hobby, hobby -> 1, Integer::sum));
     }
 
     // 1.3 소개 내용에 '좋아'가 몇번 등장하는지 계산하여라.
