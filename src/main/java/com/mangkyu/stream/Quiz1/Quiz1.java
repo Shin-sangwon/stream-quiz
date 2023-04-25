@@ -4,7 +4,6 @@ import com.opencsv.CSVReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,37 +24,51 @@ public class Quiz1 {
 
          */
         return csvLines.stream()
-            .map(array -> array[1].trim())
-            .flatMap(hobbies -> Arrays.stream(hobbies.split(":")))
-            .collect(Collectors.toMap(hobby -> hobby, hobby -> 1, Integer::sum));
+                       .map(array -> array[1].trim())
+                       .flatMap(hobbies -> Arrays.stream(hobbies.split(":")))
+                       .collect(Collectors.toMap(hobby -> hobby, hobby -> 1, Integer::sum));
     }
 
     // 1.2 각 취미를 선호하는 정씨 성을 갖는 인원이 몇 명인지 계산하여라.
-    
+
     /*
     1-1과 똑같이 접근하기
     1. 정씨 성을 가진 사람만 남기기
     2. 남은 사람 중에서, 1-1과 같은 작업 하기
+    3. 그런데, 다른 방법으로도 해보자
+    4. Collectors.counting()을 이용해 요소의 개수 얻기
+    ==============틀림===============
+    4-1. 이론상으로 될 것 같았으나, counting()은 Long을 return하여 2L과 같은 값이 입력되어 틀림.
+    5. collectingAndThen 메소드를 이용함
+    --> collectingAndThen은 Collecting을 진행한 후 그 결과로 메소드를 하나 더 호출할 수 있게 해줌
+    따라서, Collectors.counting()로 값을 Long으로 카운팅 한 뒤에, intvalue로 변환하여 해결함.
+
      */
     public Map<String, Integer> quiz2() throws IOException {
         List<String[]> csvLines = readCsvLines();
         final String lastName = "정";
 
         return csvLines.stream()
-            .filter(name -> name[0].trim().startsWith(lastName))
-            .map(array -> array[1].trim())
-            .flatMap(hobbies -> Arrays.stream(hobbies.split(":")))
-            .collect(Collectors.toMap(hobby -> hobby, hobby -> 1, Integer::sum));
+                       .filter(name -> name[0].trim()
+                                              .startsWith(lastName))
+                       .map(array -> array[1].trim())
+                       .flatMap(hobbies -> Arrays.stream(hobbies.split(":")))
+                       .collect(Collectors.groupingBy(hobby -> hobby, Collectors.collectingAndThen(Collectors.counting(), Long::intValue)));
+                       //.collect(Collectors.toMap(hobby -> hobby, hobby -> 1, Integer::sum));
     }
 
     // 1.3 소개 내용에 '좋아'가 몇번 등장하는지 계산하여라.
     public int quiz3() throws IOException {
         List<String[]> csvLines = readCsvLines();
+        final String index = "좋아";
         return 0;
+
+
     }
 
     private List<String[]> readCsvLines() throws IOException {
-        CSVReader csvReader = new CSVReader(new FileReader(getClass().getResource("/user.csv").getFile()));
+        CSVReader csvReader = new CSVReader(new FileReader(getClass().getResource("/user.csv")
+                                                                     .getFile()));
         csvReader.readNext();
         return csvReader.readAll();
     }
