@@ -53,17 +53,24 @@ public class Quiz1 {
                                               .startsWith(lastName))
                        .map(array -> array[1].trim())
                        .flatMap(hobbies -> Arrays.stream(hobbies.split(":")))
-                       .collect(Collectors.groupingBy(hobby -> hobby, Collectors.collectingAndThen(Collectors.counting(), Long::intValue)));
-                       //.collect(Collectors.toMap(hobby -> hobby, hobby -> 1, Integer::sum));
+                       .collect(Collectors.groupingBy(hobby -> hobby,
+                           Collectors.collectingAndThen(Collectors.counting(), Long::intValue)));
+        //.collect(Collectors.toMap(hobby -> hobby, hobby -> 1, Integer::sum));
     }
 
     // 1.3 소개 내용에 '좋아'가 몇번 등장하는지 계산하여라.
+
+    /*
+    틀림... 다시풀어야됨
+     */
     public int quiz3() throws IOException {
         List<String[]> csvLines = readCsvLines();
-        final String index = "좋아";
-        return 0;
+        final String index = ".*좋아*.";
 
-
+        return csvLines.stream()
+                       .map(lines -> lines[2].trim())
+                       .flatMap(line -> Arrays.stream(line.split("\\W+")))
+                       .reduce(0, (count, word) -> word.matches(index) ? count + 1 : count, Integer::sum);
     }
 
     private List<String[]> readCsvLines() throws IOException {
