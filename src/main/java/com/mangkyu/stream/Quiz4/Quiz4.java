@@ -44,9 +44,18 @@ public class Quiz4 {
     }
 
     // 4.2 거래 내역이 있는 거래자가 근무하는 모든 도시를 중복 없이 나열하라.
+    /*
+    1. map으로 city를 가져오기 (가독성 위해 2번 나눠서했는데 성능적으로 안좋을 듯)
+    2. distinct로 중복 제거하기
+    3. 리스트로 반환하기
+     */
     public List<String> quiz2() {
 
-        return Collections.emptyList();
+        return transactions.stream()
+                           .map(Transaction::getTrader)
+                           .map(Trader::getCity)
+                           .distinct()
+                           .collect(Collectors.toList());
     }
 
     // 4.3 서울에서 근무하는 모든 거래자를 찾아서 이름순서대로 정렬하라.
