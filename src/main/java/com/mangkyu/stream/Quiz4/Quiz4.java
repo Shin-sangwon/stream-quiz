@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Quiz4 {
@@ -82,13 +83,40 @@ public class Quiz4 {
     }
 
     // 4.4 모든 거래자의 이름을 구분자(",")로 구분하여 정렬하라.
+    
+    /*
+    1. map으로 트레이더 뽑아오기
+    2. 뽑아온 트레이더들을 이름 순으로 정렬해놓기
+    3. 정렬된 순서에서 이름만 뽑아내기
+    4. 중복 제거하기
+    5. , 으로 이어주기
+    
+     */
     public String quiz4() {
-        return null;
+
+        return transactions.stream()
+                           .map(Transaction::getTrader)
+                           .sorted(Comparator.comparing(Trader::getName))
+                           .map(Trader::getName)
+                           .distinct()
+                           .collect(Collectors.joining(","));
     }
 
     // 4.5 부산에 거래자가 있는지를 확인하라.
+    
+    /*
+    1. Transaction에서 map으로 trader, city 가져오기
+    2. 부산이랑 일치하는게 있는지 찾기
+    
+     */
     public boolean quiz5() {
-        return false;
+
+        final String BUSAN = "BUSAN";
+
+        return transactions.stream()
+                           .map(Transaction::getTrader)
+                           .map(Trader::getCity)
+                           .anyMatch(city -> city.equalsIgnoreCase(BUSAN));
     }
 
     // 4.6 서울에 거주하는 거래자의 모든 거래 금액을 구하라.
