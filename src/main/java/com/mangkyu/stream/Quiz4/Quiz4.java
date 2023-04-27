@@ -3,7 +3,9 @@ package com.mangkyu.stream.Quiz4;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Quiz4 {
 
@@ -16,22 +18,34 @@ public class Quiz4 {
         Trader hwan = new Trader("Hwan", "Busan");
 
         transactions = Arrays.asList(
-                new Transaction(kyu, 2019, 30000),
-                new Transaction(kyu, 2020, 12000),
-                new Transaction(ming, 2020, 40000),
-                new Transaction(ming, 2020, 7100),
-                new Transaction(hyuk, 2019, 5900),
-                new Transaction(hwan, 2020, 4900)
+            new Transaction(kyu, 2019, 30000),
+            new Transaction(kyu, 2020, 12000),
+            new Transaction(ming, 2020, 40000),
+            new Transaction(ming, 2020, 7100),
+            new Transaction(hyuk, 2019, 5900),
+            new Transaction(hwan, 2020, 4900)
         );
     }
 
     // 4.1 2020년에 일어난 모든 거래 내역을 찾아 거래값을 기준으로 오름차순 정렬하라.
+    
+    /*
+    1. filter로 2020년 거래 내역만 남기기
+    2. 거래값 기준 정렬하기
+    3. 리스트로 반환하기
+
+     */
     public List<Transaction> quiz1() {
-        return Collections.emptyList();
+
+        return transactions.stream()
+                           .filter(transaction -> transaction.getYear() == 2020)
+                           .sorted((o1, o2) -> o1.getValue() - o2.getValue())
+                           .collect(Collectors.toList());
     }
 
     // 4.2 거래 내역이 있는 거래자가 근무하는 모든 도시를 중복 없이 나열하라.
     public List<String> quiz2() {
+
         return Collections.emptyList();
     }
 
