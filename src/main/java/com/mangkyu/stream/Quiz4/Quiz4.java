@@ -28,7 +28,7 @@ public class Quiz4 {
     }
 
     // 4.1 2020년에 일어난 모든 거래 내역을 찾아 거래값을 기준으로 오름차순 정렬하라.
-    
+
     /*
     1. filter로 2020년 거래 내역만 남기기
     2. 거래값 기준 정렬하기
@@ -59,8 +59,26 @@ public class Quiz4 {
     }
 
     // 4.3 서울에서 근무하는 모든 거래자를 찾아서 이름순서대로 정렬하라.
+    /*
+    1 map으로 트레이더 뽑아오기
+    2. seoul에서 근무하는 트레이더로 필터링
+    3. 거래기록이 한개가 아닐수도 있으므로 중복 제거
+    4. 이름기준 정렬하기 (o1, o2) -> o1.getName().compareTo(o2.getName()) 으로 했었는데, 메소드 참조로 변경
+    5. 리스트로 반환하기
+     */
     public List<Trader> quiz3() {
-        return Collections.emptyList();
+
+        final String SEOUL = "SEOUL";
+
+        return transactions.stream()
+                           .map(Transaction::getTrader)
+                           .filter(trader -> trader.getCity()
+                                                   .equalsIgnoreCase(SEOUL))
+                           .distinct()
+                           .sorted(Comparator.comparing(Trader::getName))
+                           .collect(Collectors.toList());
+
+
     }
 
     // 4.4 모든 거래자의 이름을 구분자(",")로 구분하여 정렬하라.
