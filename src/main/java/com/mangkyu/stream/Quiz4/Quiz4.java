@@ -83,7 +83,7 @@ public class Quiz4 {
     }
 
     // 4.4 모든 거래자의 이름을 구분자(",")로 구분하여 정렬하라.
-    
+
     /*
     1. map으로 트레이더 뽑아오기
     2. 뽑아온 트레이더들을 이름 순으로 정렬해놓기
@@ -103,7 +103,7 @@ public class Quiz4 {
     }
 
     // 4.5 부산에 거래자가 있는지를 확인하라.
-    
+
     /*
     1. Transaction에서 map으로 trader, city 가져오기
     2. 부산이랑 일치하는게 있는지 찾기
@@ -120,8 +120,23 @@ public class Quiz4 {
     }
 
     // 4.6 서울에 거주하는 거래자의 모든 거래 금액을 구하라.
+
+    /*
+    1. 서울에 거주하는 요소만 필터링하기
+    2. 거래 금액 리스트로 반환하기
+
+     */
     public List<Integer> quiz6() {
-        return Collections.emptyList();
+
+        final String SEOUL = "SEOUL";
+
+        return transactions.stream()
+                           .filter(flag -> flag.getTrader()
+                                               .getCity()
+                                               .equalsIgnoreCase(SEOUL))
+                           .mapToInt(Transaction::getValue)
+                           .boxed()
+                           .collect(Collectors.toList());
     }
 
     // 4.7 모든 거래 내역중에서 거래 금액의 최댓값과 최솟값을 구하라. 단, 최댓값은 reduce를 이용하고 최솟값은 stream의 min()을 이용하라.
